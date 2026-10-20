@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://database:5432/db}
+    username: ${SPRING_DATASOURCE_USERNAME:usr}
+    password: ${SPRING_DATASOURCE_PASSWORD:pwd}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+management:
+ server:
+   add-application-context-header: false
+ endpoints:
+   web:
+     exposure:
+       include: health,info,env,metrics,beans,configprops
