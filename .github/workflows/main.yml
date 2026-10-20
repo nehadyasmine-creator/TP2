@@ -23,14 +23,9 @@ jobs:
       
       - name: Build and test with Maven
         run: mvn clean verify --file backend/simpleapi/simpleapi/pom.xml
+
       - name: SonarCloud Scan
-        run: >
-          mvn -B verify sonar:sonar
-          -Dsonar.projectKey=nehadyasmine-creator_TP2
-          -Dsonar.organization=nehadyasmine-creator
-          -Dsonar.host.url=https://sonarcloud.io
-          -Dsonar.login=\${{ secrets.SONAR_TOKEN }}
-          --file backend/simpleapi/simpleapi/pom.xml
+        run: mvn -B verify sonar:sonar -Dsonar.projectKey=nehadyasmine-creator_TP2 -Dsonar.organization=nehadyasmine-creator -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${{ secrets.SONAR_TOKEN }}  --file ./simpleapi/simpleapi/pom.xml
 
   build-and-push-docker-image:
     needs: test-backend
