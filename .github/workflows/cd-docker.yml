@@ -9,7 +9,6 @@ on:
 jobs:
   build-and-push-docker-image:
     runs-on: ubuntu-24.04
-    # S'exécute uniquement si le workflow précédent a réussi ET qu'on est sur la branche main
     if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main' }}
     steps:
       - name: Checkout code
@@ -49,11 +48,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install ansible
 
-      - name: Configure SSH Key
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/my_key
-          chmod 600 ~/.ssh/my_key
+      - name: Setup SSH Agent
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Run Ansible Playbook
         run: |
