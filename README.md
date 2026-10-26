@@ -69,3 +69,17 @@ Déposer nos images dans un registre en ligne (comme Docker Hub) permet de :
 - Partager facilement le code et l'application avec les autres membres d'une équipe
 - Déployer l'application de manière automatisée sur des serveurs distants, des environnements de test ou de production sans avoir à recompiler le code source sur chaque machine.
 - Centraliser et versionner les différentes versions de l'application de manière sécurisée.
+
+# Documentez votre plan de jeu
+Architecture par rôles :
+La logique d'installation a été externalisée sous forme de rôle (roles/docker). Cela permet de modulariser le code Ansible, de le rendre plus lisible et facilement réutilisable pour d'autres projets ou environnements. Le dossier tasks/main.yml centralise l'ensemble des tâches déclaratives (prérequis, dépôt GPG, paquets Docker, environnement virtuel Python et gestion du service).
+
+Refactorisation du Playbook (playbook.yml) :
+Le playbook principal a été épuré. Il délègue désormais l'exécution à la section roles:, tout en conservant les configurations globales indispensables (hosts: all, gather_facts: true, et l'élévation des privilèges become: true).
+
+#Documentez la configuration de vos tâches docker_container
+Voici un modèle de documentation pour votre rapport :
+- Utilisation du module docker_container et docker_network : Les rôles Ansible utilisent les modules officiels de gestion Docker pour automatiser le cycle de vie des conteneurs et des réseaux sur l'hôte distant de manière déclarative.
+- Interpréteur Python (ansible_python_interpreter) : Chaque tâche liée à Docker spécifie explicitement l'interpréteur Python de l'environnement virtuel (/opt/docker_venv/bin/python) afin de garantir que le SDK Docker pour Python est bien utilisé pour dialoguer avec le démon Docker.
+- Variables d'environnement et interconnexion : Les conteneurs de la base de données et de l'application intègrent les variables d'environnement requises (POSTGRES_DB, SPRING_DATASOURCE_URL, etc.). Ils sont rattachés au même réseau virtuel (app-network), permettant à l'API de communiquer directement avec la base de données via son nom de conteneur (database).
+- Exposition des ports et politique de redémarrage : Les conteneurs de l'API (8080:8080) et du proxy HTTPD (80:80) publient leurs ports vers l'extérieur. La politique de redémarrage (restart_policy: always) garantit la haute disponibilité des services en cas de redémarrage du serveur.

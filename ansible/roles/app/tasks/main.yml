@@ -1,0 +1,15 @@
+- name: Run Application Container
+  docker_container:
+    name: backend
+    image: yasminenhd/tp-devops-simple-api
+    networks:
+      - name: app-network
+    env:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/db
+      SPRING_DATASOURCE_USERNAME: usr
+      SPRING_DATASOURCE_PASSWORD: pwd
+    ports:
+      - "8080:8080"
+    restart_policy: always
+  vars:
+    ansible_python_interpreter: /opt/docker_venv/bin/python
