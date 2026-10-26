@@ -2,6 +2,7 @@
   docker_container:
     name: database
     image: yasminenhd/tp-devops-database
+    pull: yes
     networks:
       - name: app-network
     env:

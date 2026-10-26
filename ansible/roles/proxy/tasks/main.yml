@@ -2,6 +2,7 @@
   docker_container:
     name: httpd
     image: yasminenhd/tp-devops-httpd
+    pull: yes
     networks:
       - name: app-network
     ports:

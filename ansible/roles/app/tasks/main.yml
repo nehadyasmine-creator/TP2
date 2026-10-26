@@ -2,6 +2,7 @@
   docker_container:
     name: backend
     image: yasminenhd/tp-devops-simple-api
+    pull: yes
     networks:
       - name: app-network
     env:
